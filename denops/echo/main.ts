@@ -2,17 +2,16 @@ import { Denops } from "https://deno.land/x/denops_std@v2.0.0/mod.ts";
 import { execute } from "https://deno.land/x/denops_std@v2.0.0/helper/mod.ts";
 import { ensureString } from "https://deno.land/x/unknownutil@v2.0.0/mod.ts";
 
-export async function main(denops: Denops): Promise<void> {
+export const main = async (denops: Denops): Promise<void> => {
   denops.dispatcher = {
-    async echo(text: unknown): Promise<unknown> {
-      ensureString(text);
-      return await Promise.resolve(text);
+    echo: async (arg: unknown): Promise<unknown> => {
+      ensureString(arg);
+      return await Promise.resolve(arg);
     },
   };
 
   await execute(
     denops,
-    `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`,
+    `command! -nargs=+ SnacamEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`
   );
-}
-
+};
