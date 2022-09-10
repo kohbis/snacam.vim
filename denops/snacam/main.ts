@@ -1,12 +1,8 @@
-import { Denops, helper, fn, ensureString } from './deps.ts';
+import { Denops, helper, fn } from './deps.ts';
 import { RangePosition } from './types.ts';
 
 export const main = async (denops: Denops): Promise<void> => {
   denops.dispatcher = {
-    echo: async (arg: unknown): Promise<unknown> => {
-      ensureString(arg);
-      return await Promise.resolve(arg);
-    },
     echoRange: async (): Promise<string | void> => {
       return await getStr(denops)
         .then((str) => str)
@@ -17,7 +13,6 @@ export const main = async (denops: Denops): Promise<void> => {
   await helper.execute(
     denops,
     `
-    command! -nargs=+ SnacamEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])
     command! -range SnacamEchoRange echomsg denops#request('${denops.name}', 'echoRange', '')
     `
   );
