@@ -32,8 +32,13 @@ export const main = async (denops: Denops): Promise<void> => {
             case 'snake':
               r = words.join('_');
               break;
-            default:
-              r = words.join('');
+            case 'camel':
+              r = capitalizeWords(words).join('');
+              r = r.charAt(0).toLowerCase() + r.slice(1);
+              break;
+            case 'pascal':
+              r = capitalizeWords(words).join('');
+              break;
           }
 
           const line = (await fn.getline(denops, start.lnum, end.lnum)).join('');
@@ -50,12 +55,18 @@ export const main = async (denops: Denops): Promise<void> => {
     `
     command! -range SnacamEchoRange echomsg denops#request('${denops.name}', 'echoRange', '')
     command! -range SnacamSnake call denops#request('${denops.name}', 'convert', ['snake'])
+    command! -range SnacamCamel call denops#request('${denops.name}', 'convert', ['camel'])
+    command! -range SnacamPascal call denops#request('${denops.name}', 'convert', ['pascal'])
     `
   );
 };
 
 const isConvertMode = (mode: string): boolean => {
   return convertModes.includes(mode);
+};
+
+const capitalizeWords = (words: string[]): string[] => {
+  return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
 };
 
 const getPositions = async (
