@@ -12,7 +12,6 @@ A plugin to convert strings to specified case.
 
 " convert to camelCase
 :'<,'>SnacamCamel
-![demo](https://user-images.githubusercontent.com/18735471/189489841-1c108e9e-2302-41b6-8a78-df3b192e82c1.gif)
 
 " convert to PascalCase
 :'<,'>SnacamPascal
