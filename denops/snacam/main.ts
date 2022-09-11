@@ -10,9 +10,9 @@ export const main = async (denops: Denops): Promise<void> => {
         .then((str) => str)
         .catch((err) => console.error(err));
     },
-    convert: async (mode: unknown): Promise<void> => {
-      ensureString(mode);
-      if (!isConvertMode(mode as string)) {
+    convert: async (arg: unknown): Promise<void> => {
+      const mode = ensureString(arg);
+      if (!isConvertMode(mode)) {
         return console.warn(`Unsupport convert mode: ${mode}`);
       }
 
