@@ -1,7 +1,7 @@
-import { Denops, helper, fn, ensureString } from './deps.ts';
-import { RangePosition } from './types.ts';
+import { Denops, ensureString, fn, helper } from "./deps.ts";
+import { RangePosition } from "./types.ts";
 
-const convertModes = ['snake', 'camel', 'pascal'];
+const convertModes = ["snake", "camel", "pascal"];
 
 export const main = async (denops: Denops): Promise<void> => {
   denops.dispatcher = {
@@ -27,24 +27,26 @@ export const main = async (denops: Denops): Promise<void> => {
             return;
           }
 
-          let r = '';
+          let r = "";
           switch (mode) {
-            case 'snake':
-              r = words.join('_');
+            case "snake":
+              r = words.join("_");
               break;
-            case 'camel':
-              r = capitalizeWords(words).join('');
+            case "camel":
+              r = capitalizeWords(words).join("");
               r = r.charAt(0).toLowerCase() + r.slice(1);
               break;
-            case 'pascal':
-              r = capitalizeWords(words).join('');
+            case "pascal":
+              r = capitalizeWords(words).join("");
               break;
           }
 
-          const line = (await fn.getline(denops, start.lnum, end.lnum)).join('');
+          const line = (await fn.getline(denops, start.lnum, end.lnum)).join(
+            "",
+          );
           const pre = line.substring(0, start.col - 1);
           const post = line.substring(end.col);
-          await fn.setline(denops, '.', pre + r + post);
+          await fn.setline(denops, ".", pre + r + post);
         })
         .catch((err) => console.error(err));
     },
@@ -57,7 +59,7 @@ export const main = async (denops: Denops): Promise<void> => {
     command! -range SnacamSnake call denops#request('${denops.name}', 'convert', ['snake'])
     command! -range SnacamCamel call denops#request('${denops.name}', 'convert', ['camel'])
     command! -range SnacamPascal call denops#request('${denops.name}', 'convert', ['pascal'])
-    `
+    `,
   );
 };
 
@@ -66,11 +68,13 @@ const isConvertMode = (mode: string): boolean => {
 };
 
 const capitalizeWords = (words: string[]): string[] => {
-  return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+  return words.map((word) =>
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  );
 };
 
 const getPositions = async (
-  denops: Denops
+  denops: Denops,
 ): Promise<[start: RangePosition, end: RangePosition]> => {
   const [bufnumS, lnumS, colS, offS] = await fn.getpos(denops, "'<");
   const [bufnumE, lnumE, colE, offE] = await fn.getpos(denops, "'>");
@@ -91,12 +95,15 @@ const getPositions = async (
   return [start, end];
 };
 
-const getStr = async (denops: Denops, [start, end]: Array<RangePosition>): Promise<string> => {
+const getStr = async (
+  denops: Denops,
+  [start, end]: Array<RangePosition>,
+): Promise<string> => {
   if (start.lnum !== end.lnum) {
-    return Promise.reject('Multiline not supported');
+    return Promise.reject("Multiline not supported");
   }
   const str = (await fn.getline(denops, start.lnum, end.lnum))
-    .join('')
+    .join("")
     .substring(start.col - 1, end.col)
     .trim();
 

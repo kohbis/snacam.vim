@@ -1,0 +1,19 @@
+name: ci
+
+on: push
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: 1.29
+
+      - name: Check code formatting
+        run: deno fmt --check --unstable .
