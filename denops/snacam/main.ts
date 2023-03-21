@@ -19,10 +19,7 @@ export const main = async (denops: Denops): Promise<void> => {
       const [start, end] = await getPositions(denops);
       return await getStr(denops, await getPositions(denops))
         .then(async (str) => {
-          const words = (str.match(/[a-zA-Z][a-z]*/g) || [])
-            .filter((word) => word)
-            .map((word) => word.toLowerCase());
-
+          const words = splitStr(str);
           if (words.length === 0) {
             return;
           }
@@ -108,4 +105,10 @@ const getStr = async (
     .trim();
 
   return await Promise.resolve(str);
+};
+
+const splitStr = (str: string): string[] => {
+  return (str.match(/[a-zA-Z][a-z]*/g) || []).filter((word) => word).map((
+    word,
+  ) => word.toLowerCase());
 };
