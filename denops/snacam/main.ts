@@ -5,9 +5,14 @@ const convertModes = ["snake", "camel", "pascal"];
 
 export const main = async (denops: Denops): Promise<void> => {
   denops.dispatcher = {
-    echoRange: async (): Promise<string | void> => {
+    echoStr: async (): Promise<string | void> => {
       return await getStr(denops, await getPositions(denops))
         .then((str) => str)
+        .catch((err) => console.error(err));
+    },
+    echoWords: async (): Promise<string[] | void> => {
+      return await getStr(denops, await getPositions(denops))
+        .then((str) => splitStr(str))
         .catch((err) => console.error(err));
     },
     convert: async (arg: unknown): Promise<void> => {
@@ -52,7 +57,8 @@ export const main = async (denops: Denops): Promise<void> => {
   await helper.execute(
     denops,
     `
-    command! -range SnacamEchoRange echomsg denops#request('${denops.name}', 'echoRange', '')
+    command! -range SnacamEchoStr echomsg denops#request('${denops.name}', 'echoStr', '')
+    command! -range SnacamEchoWords echomsg denops#request('${denops.name}', 'echoWords', '')
     command! -range SnacamSnake call denops#request('${denops.name}', 'convert', ['snake'])
     command! -range SnacamCamel call denops#request('${denops.name}', 'convert', ['camel'])
     command! -range SnacamPascal call denops#request('${denops.name}', 'convert', ['pascal'])
