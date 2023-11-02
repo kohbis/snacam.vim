@@ -1,4 +1,4 @@
-import { Denops, ensureString, fn, helper } from "./deps.ts";
+import { Denops, ensure, fn, helper, is } from "./deps.ts";
 import { RangePosition } from "./types.ts";
 
 const convertModes = ["snake", "camel", "pascal"];
@@ -16,7 +16,7 @@ export const main = async (denops: Denops): Promise<void> => {
         .catch((err) => console.error(err));
     },
     convert: async (arg: unknown): Promise<void> => {
-      const mode = ensureString(arg);
+      const mode = ensure(arg, is.String);
       if (!isConvertMode(mode)) {
         return console.warn(`Unsupport convert mode: ${mode}`);
       }
@@ -71,8 +71,8 @@ const isConvertMode = (mode: string): boolean => {
 };
 
 const capitalizeWords = (words: string[]): string[] => {
-  return words.map((word) =>
-    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  return words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
   );
 };
 
@@ -114,7 +114,7 @@ const getStr = async (
 };
 
 const splitStr = (str: string): string[] => {
-  return (str.match(/[a-zA-Z][a-z]*/g) || []).filter((word) => word).map((
-    word,
-  ) => word.toLowerCase());
+  return (str.match(/[a-zA-Z][a-z]*/g) || [])
+    .filter((word) => word)
+    .map((word) => word.toLowerCase());
 };
